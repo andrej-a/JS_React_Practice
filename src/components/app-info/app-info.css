@@ -1,0 +1,16 @@
+.app-info {
+    padding: 25px;
+    margin-top: 25px;
+    background-color: #10b9bef1;
+    border-radius: 4px;
+    box-shadow: 5px 5px 15px rgba(0,0,0, .15);
+    color: #fff;
+}
+
+.app-info h1 {
+    text-align: center;
+}
+
+.app-info h2 {
+    font-weight: 300;
+}

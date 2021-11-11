@@ -1,0 +1,23 @@
+.day {
+    margin-top: 10px;
+}
+
+.day-heading h2 {
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    height: 50px;
+}
+
+.day-item {
+    max-height: 0px;
+    opacity: 1;
+    /*overflow: hidden;*/
+    transition: opacity 0.5s, max-height 0.6s, padding 0.1s;
+    display: block;
+}
+
+.day-active {
+    overflow: visible;
+    opacity: 1;
+}
