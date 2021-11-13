@@ -1,20 +1,26 @@
+
 .day {
-    margin-top: 10px;
+    display: block;
+}
+.day:last-child {
+    margin-bottom: 20px;
 }
 
-.day-heading h2 {
+.day-heading {
     text-align: center;
-    padding: 10px;
     cursor: pointer;
     height: 50px;
+    display: block;
+}
+.day-heading>h2{
+    padding: 10px;
 }
 
 .day-item {
-    max-height: 0px;
+    /*max-height: 0px;*/
     opacity: 1;
     /*overflow: hidden;*/
-    transition: opacity 0.5s, max-height 0.6s, padding 0.1s;
-    display: block;
+    transition: opacity 0.5s, max-height 0.6s, padding 0.1s;  
 }
 
 .day-active {

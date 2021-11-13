@@ -1,9 +1,14 @@
 import "./student-list-item.css";
 
-const StudentItem = () => {
+const StudentItem = ({name, time}) => {
     return(
         <li className="list-group-item d-flex justify-content-between">
-            <span className="list-group-item-label">Name Surname</span>
+            <span className="list-group-item-label">{name}</span>
+            
+            <div className="time">
+                <h4 className="time">{time}</h4>
+            </div>
+            
             <div className='d-flex justify-content-center align-items-center'>
                 
                 <button type="button"
