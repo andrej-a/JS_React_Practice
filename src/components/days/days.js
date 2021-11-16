@@ -2,62 +2,67 @@ import StudentItem from "../student-list-item/student-list-item";
 import "./days.css";
 
 
+const Days = ({dataBase}) => {
 
-const Days = () => {
-    const days = ["Понедельник", "Вторник"];
-    
-    const dataBase = {
-        "Понедельник": [
-            ["Vienna", "10:00"],
-            ["Rima", "11:00"],
-            ["Anton", "18:00"]
-        ],
+    let {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dataBase;
 
-        "Вторник": [
-            ["Vlad", "13:00"],
-        ]
+    const sortCards = (array) => {
+        array.sort(function (a, b) {
+            if (a.props.time > b.props.time) {
+              return 1;
+            }
+            if (a.props.time < b.props.time) {
+              return -1;
+            }
+            return 0;
+          });
     };
+    
+    const createCards = (array, sortByTime = true) => {
+        const cards = [];
+        
+        array.map(item => {
+            return cards.push(<StudentItem key={item[2]} name={item[0]} time={item[1]}/>);
+        });
 
-    const cr = () =>{
-        for (let data in dataBase) {
-            days.forEach(day => {
-                if (data === day) {
-                   let elem = dataBase[day].map(item => {
-                    
-                        return (
-                            <div className="day">
-                    <div className="day-heading">
-                        <h2>{day}</h2>
-                    </div>
-                    <div className="day-item">
-                        <div className="day-inner">
-                            <StudentItem name={item[0]} time={item[1]}/>
-                        </div>
-                    </div>
-                </div>
-                        )
-                    })
-                    return elem;
-                }
-            });
+        if (sortByTime) {
+            sortCards(cards);
         }
+          
+        return cards;
     }
-
-    console.log(cr());
-
+    
     return (
         <div className="days-wrapper">
-            
-            {cr()}
-            
+            <div className="day">
+                <div className="day-heading">
+                    <h2>Понедельник</h2>
+                </div>
+                <div className="day-item">
+                    <div className="day-inner">
+                        {createCards(monday)}
+                    </div>
+                </div>
+            </div>
 
+            <div className="day">
+                <div className="day-heading">
+                    <h2>Вторник</h2>
+                </div>
+                <div className="day-item">
+                    <div className="day-inner">
+                        {createCards(tuesday)}
+                    </div>
+                </div>
+            </div>
+                        
             <div className="day">
                 <div className="day-heading">
                     <h2>Среда</h2>
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                        <StudentItem name="Liza" time="20:00"/>
+                    {createCards(wednesday)}
                     </div>
                 </div>
             </div>
@@ -68,7 +73,7 @@ const Days = () => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                        <StudentItem name="Marat" time="18:00"/>
+                    {createCards(thursday)}
                     </div>
                 </div>
             </div>
@@ -79,7 +84,7 @@ const Days = () => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                        <StudentItem name="Liza" time="10:00"/>
+                    {createCards(friday)}
                     </div>
                 </div>
             </div>
@@ -90,7 +95,7 @@ const Days = () => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                        <StudentItem name="Vlad" time="14:50"/>
+                    {createCards(saturday)}
                     </div>
                 </div>
             </div>
@@ -101,7 +106,7 @@ const Days = () => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                        <StudentItem name="Rima" time="11:00"/>
+                    {createCards(sunday)}
                     </div>
                 </div>
             </div>
