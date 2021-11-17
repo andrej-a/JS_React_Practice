@@ -1,8 +1,29 @@
+import {Component} from "react";
 import "./student-list-item.css";
 
-const StudentItem = ({name, time}) => {
+class StudentItem extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            like: false
+        };
+    }
+    setLike = (e) => {
+        this.setState(({like}) => ({
+            like: !like
+        }))
+    };
+
+    render() {
+    const {name, time} = this.props;
+    const {like} = this.state;
+    let classNames = "list-group-item d-flex justify-content-between";
+    
+    if (like) {
+        classNames += " like";
+    }
     return(
-        <li className="list-group-item d-flex justify-content-between">
+        <li onClick={(e) => this.setLike(e)} className={classNames}>
             <span className="list-group-item-label">{name}</span>
             
             <div className="time">
@@ -20,6 +41,7 @@ const StudentItem = ({name, time}) => {
             </div>
         </li>
     )
+   }
 }
 
 export default StudentItem;
