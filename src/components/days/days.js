@@ -2,7 +2,7 @@ import StudentItem from "../student-list-item/student-list-item";
 import "./days.css";
 
 
-const Days = ({dataBase}) => {
+const Days = ({dataBase, onDelete}) => {
 
     let {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dataBase;
 
@@ -22,7 +22,12 @@ const Days = ({dataBase}) => {
         const cards = [];
         
         array.map(item => {
-            return cards.push(<StudentItem key={item[2]} name={item[0]} time={item[1]}/>);
+            return cards.push(<StudentItem 
+                key={item[2]} 
+                name={item[0]} 
+                time={item[1]}
+                onDelete={onDelete}
+                />);
         });
 
         if (sortByTime) {

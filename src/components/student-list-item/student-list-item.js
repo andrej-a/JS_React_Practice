@@ -9,13 +9,15 @@ class StudentItem extends Component {
         };
     }
     setLike = (e) => {
-        this.setState(({like}) => ({
-            like: !like
-        }))
+        if (!e.target.classList.contains("fa-trash")) {
+            this.setState(({like}) => ({
+                like: !like
+            }))
+        }
     };
 
     render() {
-    const {name, time} = this.props;
+    const {name, time, onDelete} = this.props;
     const {like} = this.state;
     let classNames = "list-group-item d-flex justify-content-between";
     
@@ -32,7 +34,7 @@ class StudentItem extends Component {
             
             <div className='d-flex justify-content-center align-items-center'>
                 
-                <button type="button"
+                <button onClick={onDelete} type="button"
                         className="btn-trash btn-sm ">
                     <i className="fas fa-trash"></i>
                 </button>

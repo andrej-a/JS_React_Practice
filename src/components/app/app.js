@@ -51,7 +51,9 @@ function App() {
             </div>
 
             <div className="day-items">
-                <Days dataBase = {dataBase}/>
+                <Days 
+                dataBase = {dataBase}
+                onDelete={(e) => console.log(e.target)}/>
             </div>
 
             <StudentAddForm/>
