@@ -3,8 +3,8 @@ import "./days.css";
 
 
 const Days = ({dataBase, onDelete}) => {
-
-    let {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dataBase;
+    //each array of dataBase
+    let {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dataBase; 
 
     const sortCards = (array) => {
         array.sort(function (a, b) {
@@ -18,15 +18,17 @@ const Days = ({dataBase, onDelete}) => {
           });
     };
     
-    const createCards = (array, sortByTime = true) => {
+    const createCards = (array, weekDay, sortByTime = true) => {
         const cards = [];
         
         array.map(item => {
             return cards.push(<StudentItem 
-                key={item[2]} 
                 name={item[0]} 
                 time={item[1]}
-                onDelete={onDelete}
+                key={item[2]} //for React
+                index={item[2]} //for onDelete
+                weekDay={weekDay} //for onDelete
+                onDelete={onDelete} 
                 />);
         });
 
@@ -45,7 +47,7 @@ const Days = ({dataBase, onDelete}) => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                        {createCards(monday)}
+                        {createCards(monday, "monday")}
                     </div>
                 </div>
             </div>
@@ -56,7 +58,7 @@ const Days = ({dataBase, onDelete}) => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                        {createCards(tuesday)}
+                        {createCards(tuesday, "tuesday")}
                     </div>
                 </div>
             </div>
@@ -67,7 +69,7 @@ const Days = ({dataBase, onDelete}) => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                    {createCards(wednesday)}
+                    {createCards(wednesday, "wednesday")}
                     </div>
                 </div>
             </div>
@@ -78,7 +80,7 @@ const Days = ({dataBase, onDelete}) => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                    {createCards(thursday)}
+                    {createCards(thursday, "thursday")}
                     </div>
                 </div>
             </div>
@@ -89,7 +91,7 @@ const Days = ({dataBase, onDelete}) => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                    {createCards(friday)}
+                    {createCards(friday, "friday")}
                     </div>
                 </div>
             </div>
@@ -100,7 +102,7 @@ const Days = ({dataBase, onDelete}) => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                    {createCards(saturday)}
+                    {createCards(saturday, "saturday")}
                     </div>
                 </div>
             </div>
@@ -111,7 +113,7 @@ const Days = ({dataBase, onDelete}) => {
                 </div>
                 <div className="day-item">
                     <div className="day-inner">
-                    {createCards(sunday)}
+                    {createCards(sunday, "sunday")}
                     </div>
                 </div>
             </div>

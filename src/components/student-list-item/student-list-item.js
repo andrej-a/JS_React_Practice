@@ -1,4 +1,5 @@
 import {Component} from "react";
+
 import "./student-list-item.css";
 
 class StudentItem extends Component {
@@ -9,7 +10,7 @@ class StudentItem extends Component {
         };
     }
     setLike = (e) => {
-        if (!e.target.classList.contains("fa-trash")) {
+        if (!e.target.classList.contains("btn-trash")) {
             this.setState(({like}) => ({
                 like: !like
             }))
@@ -17,7 +18,7 @@ class StudentItem extends Component {
     };
 
     render() {
-    const {name, time, onDelete} = this.props;
+    const {name, time, index, weekDay, onDelete} = this.props;
     const {like} = this.state;
     let classNames = "list-group-item d-flex justify-content-between";
     
@@ -34,9 +35,17 @@ class StudentItem extends Component {
             
             <div className='d-flex justify-content-center align-items-center'>
                 
-                <button onClick={onDelete} type="button"
-                        className="btn-trash btn-sm ">
-                    <i className="fas fa-trash"></i>
+                <button 
+                onClick={onDelete} 
+                type="button"
+                className="btn-trash btn-sm ">
+                    
+                    <i 
+                    id={index} 
+                    data-weekday={weekDay} 
+                    className="fas fa-trash">
+                    </i>
+
                 </button>
                 
                 <i className="fas fa-star"></i>

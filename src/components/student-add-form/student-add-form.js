@@ -10,7 +10,7 @@ class StudentAddForm extends Component{
             day: "Понедельник"
         };
     }
-
+    //установить данные
     onSetDates = (e) => {
         this.setState({
             [e.target.name]: e.target.value

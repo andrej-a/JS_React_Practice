@@ -1,10 +1,12 @@
-import "./app.css";
+import { Component } from "react";
+
 import AppInfo from "../app-info/app-info";
 import SearchPanel from "../search-panel/search-panel";
 import Filter from "../app-filter/app-filter";
 import Days from "../days/days";
 import StudentAddForm from "../student-add-form/student-add-form";
 
+import "./app.css";
 
 const dataBase = {
     monday: [
@@ -37,29 +39,56 @@ const dataBase = {
         ["Gleb", "14:00", 1],
         ["Vera", "09:00", 2],
     ],
-};
+}
 
-function App() {   
+class App extends Component {   
+    constructor(props) {
+        super(props);
+        this.state = {
+            dataBase: dataBase
+        };
+    }
 
-    return(
-        <div className="app">
-            <AppInfo></AppInfo>
+    deleteItem = (e) => {
+        const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase)); //deep copy
+            //copyDataBase["monday"] etc.
+           copyDataBase[e.target.dataset.weekday].forEach(item => {
+           if (item[2] === +e.target.id) {
+               copyDataBase[e.target.dataset.weekday].splice(copyDataBase[e.target.dataset.weekday].indexOf(item), 1);
+           }
+       })
+       return copyDataBase;
+    }
 
-            <div className="search-panel">
-                <SearchPanel/>
-                <Filter/>
-            </div>
+    changeState = (e) => {
+        if (e.target.classList.contains("fa-trash")) {
+            this.setState(({state}) => ({
+            dataBase: this.deleteItem(e)
+        }))
+        }
+    }
 
-            <div className="day-items">
-                <Days 
-                dataBase = {dataBase}
-                onDelete={(e) => console.log(e.target)}/>
-            </div>
-
-            <StudentAddForm/>
-
-        </div>//app
-    )
+    render() {
+        return(
+            <div className="app">
+                <AppInfo></AppInfo>
+    
+                <div className="search-panel">
+                    <SearchPanel/>
+                    <Filter/>
+                </div>
+    
+                <div className="day-items">
+                    <Days 
+                    dataBase = {this.state.dataBase}
+                    onDelete={(e) => {this.changeState(e)}}/>
+                </div>
+    
+                <StudentAddForm/>
+    
+            </div>//app
+        )
+    }
 }
 
 export default App;
