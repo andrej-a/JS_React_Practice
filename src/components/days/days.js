@@ -2,7 +2,7 @@ import StudentItem from "../student-list-item/student-list-item";
 import "./days.css";
 
 
-const Days = ({dataBase, onDelete}) => {
+const Days = ({dataBase, onDelete, create}) => {
     //each array of dataBase
     let {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dataBase; 
 

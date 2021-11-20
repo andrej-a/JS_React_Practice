@@ -1,5 +1,7 @@
 import { Component } from "react";
+
 import "./student-add-form.css";
+
 
 class StudentAddForm extends Component{
     constructor(props) {
@@ -7,7 +9,7 @@ class StudentAddForm extends Component{
         this.state = {
             name: "",
             time: "",
-            day: "Понедельник"
+            day: "Понедельник",
         };
     }
     //установить данные
@@ -16,13 +18,25 @@ class StudentAddForm extends Component{
             [e.target.name]: e.target.value
         });
     }
+    
+    setItem = (e) => {
+        e.preventDefault();
+        this.props.addItem(this.state.name, this.state.time, this.state.day);
+
+        this.setState({
+            name: "",
+            time: "",
+            day: "Понедельник",
+        })
+    }
 
     render() {           
-        const {name, time, day} = this.state;     
+        const {name, time, day} = this.state;
         return (
             <div className="app-add-form">
                 <h3>Добавить нового уеника</h3>
                 <form
+                    onSubmit={(e) => {this.setItem(e)}}
                     className="add-form d-flex">
                     <input 
                         onChange={this.onSetDates} 

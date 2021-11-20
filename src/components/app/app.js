@@ -10,43 +10,41 @@ import "./app.css";
 
 const dataBase = {
     monday: [
-        ["Vienna", "10:00", 1],
-        ["Ia", "15:00", 2],
-        ["Vera", "09:00", 3],
+        
     ],
     tuesday: [
-        ["Liza", "12:00", 1],
-        ["Mia", "15:00", 2],
+        
     ],
     wednesday: [
-        ["Liza", "12:00", 1],
-        ["Gleb", "14:00", 2]
+       
     ],
     thursday: [
-        ["Liza", "12:00", 1],
-        ["Marat", "12:25", 2],
-        ["Liza", "12:00", 3],
+        
     ],
     friday: [
-        ["Marat", "12:25", 1],
-        ["Vera", "09:00", 2],
+       
     ],
     saturday: [
-        ["Gleb", "14:00", 1],
-        ["Marat", "12:25", 2],
+        
     ],
     sunday: [
-        ["Gleb", "14:00", 1],
-        ["Vera", "09:00", 2],
+        
     ],
 }
-
+let id = 0;
 class App extends Component {   
     constructor(props) {
         super(props);
-        this.state = {
-            dataBase: dataBase
-        };
+        if (!localStorage.getItem("dataBase")) {
+            this.state = {
+                dataBase: dataBase
+            }; 
+        } else {
+            this.state = {
+                dataBase: JSON.parse(localStorage.getItem("dataBase"))
+            };
+        }
+        
     }
 
     deleteItem = (e) => {
@@ -56,7 +54,8 @@ class App extends Component {
            if (item[2] === +e.target.id) {
                copyDataBase[e.target.dataset.weekday].splice(copyDataBase[e.target.dataset.weekday].indexOf(item), 1);
            }
-       })
+       });
+       localStorage.setItem("dataBase", JSON.stringify(copyDataBase));
        return copyDataBase;
     }
 
@@ -66,6 +65,46 @@ class App extends Component {
             dataBase: this.deleteItem(e)
         }))
         }
+    }
+
+        
+    createItem = (name, time, day) => {
+        const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
+        const item = [name, time, id++]
+        
+        switch (day) {
+            case "Понедельник":
+                copyDataBase.monday.push(item); 
+                break;
+            case "Вторник":
+                copyDataBase.tuesday.push(item);
+                break;
+            case "Среда":
+                copyDataBase.wednesday.push(item);
+                break;
+            case "Четверг":
+                copyDataBase.thursday.push(item);
+                break;
+            case "Пятница":
+            copyDataBase.friday.push(item);
+            break;
+            case "Суббота":
+                copyDataBase.saturday.push(item);
+                break;
+            case "Воскресенье":
+                copyDataBase.sunday.push(item);
+                break;
+            default:
+                break;
+        }
+        localStorage.setItem("dataBase", JSON.stringify(copyDataBase));
+        return copyDataBase;
+    }
+
+    addItem = (name, time, day) => {
+        this.setState(({state}) => ({
+            dataBase: this.createItem(name, time, day)
+        }))
     }
 
     render() {
@@ -81,10 +120,13 @@ class App extends Component {
                 <div className="day-items">
                     <Days 
                     dataBase = {this.state.dataBase}
-                    onDelete={(e) => {this.changeState(e)}}/>
+                    onDelete={(e) => {this.changeState(e)}}
+                    />
                 </div>
     
-                <StudentAddForm/>
+                <StudentAddForm 
+                addItem={this.addItem}
+                />
     
             </div>//app
         )
