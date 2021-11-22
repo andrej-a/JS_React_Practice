@@ -19,9 +19,10 @@ class StudentAddForm extends Component{
         });
     }
     
-    setItem = (e) => {
+    createItem = (e) => {
         e.preventDefault();
-        this.props.addItem(this.state.name, this.state.time, this.state.day);
+        
+        this.props.createItem(this.state.name, this.state.time, this.state.day);
 
         this.setState({
             name: "",
@@ -36,7 +37,7 @@ class StudentAddForm extends Component{
             <div className="app-add-form">
                 <h3>Добавить нового уеника</h3>
                 <form
-                    onSubmit={(e) => {this.setItem(e)}}
+                    onSubmit={(e) => {this.createItem(e)}}
                     className="add-form d-flex">
                     <input 
                         onChange={this.onSetDates} 

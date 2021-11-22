@@ -1,32 +1,21 @@
-import {Component} from "react";
 
 import "./student-list-item.css";
 
-class StudentItem extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            like: false
-        };
-    }
-    setLike = (e) => {
-        if (!e.target.classList.contains("btn-trash")) {
-            this.setState(({like}) => ({
-                like: !like
-            }))
-        }
-    };
-
-    render() {
-    const {name, time, index, weekDay, onDelete} = this.props;
-    const {like} = this.state;
-    let classNames = "list-group-item d-flex justify-content-between";
+const StudentItem = (props) => {
     
-    if (like) {
-        classNames += " like";
-    }
+
+    const {name, time, index, weekDay, notice, deleteItem, toggleNotice} = props;
+
+    const classNames = notice === true ? "list-group-item d-flex justify-content-between like" : "list-group-item d-flex justify-content-between";
+    
     return(
-        <li onClick={(e) => this.setLike(e)} className={classNames}>
+        <li 
+        onClick={(e) => toggleNotice(e)}
+        data-notice={notice}
+        data-weekday={weekDay}
+        data-index={index} 
+        className={classNames}>
+
             <span className="list-group-item-label">{name}</span>
             
             <div className="time">
@@ -36,7 +25,7 @@ class StudentItem extends Component {
             <div className='d-flex justify-content-center align-items-center'>
                 
                 <button 
-                onClick={onDelete} 
+                onClick={deleteItem} 
                 type="button"
                 className="btn-trash btn-sm ">
                     
@@ -53,6 +42,5 @@ class StudentItem extends Component {
         </li>
     )
    }
-}
 
 export default StudentItem;

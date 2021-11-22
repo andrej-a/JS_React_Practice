@@ -2,10 +2,11 @@ import StudentItem from "../student-list-item/student-list-item";
 import "./days.css";
 
 
-const Days = ({dataBase, onDelete, create}) => {
+const Days = ({dataBase, deleteItem, toggleNotice}) => {
     //each array of dataBase
     let {monday, tuesday, wednesday, thursday, friday, saturday, sunday} = dataBase; 
 
+    //sort cards by time for createCards
     const sortCards = (array) => {
         array.sort(function (a, b) {
             if (a.props.time > b.props.time) {
@@ -20,7 +21,7 @@ const Days = ({dataBase, onDelete, create}) => {
     
     const createCards = (array, weekDay, sortByTime = true) => {
         const cards = [];
-        
+                    //item = [name, time, key]
         array.map(item => {
             return cards.push(<StudentItem 
                 name={item[0]} 
@@ -28,7 +29,9 @@ const Days = ({dataBase, onDelete, create}) => {
                 key={item[2]} //for React
                 index={item[2]} //for onDelete
                 weekDay={weekDay} //for onDelete
-                onDelete={onDelete} 
+                notice={item[3]} //for toggleNotice
+                deleteItem={deleteItem}
+                toggleNotice={toggleNotice}
                 />);
         });
 
