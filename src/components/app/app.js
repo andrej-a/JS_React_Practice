@@ -10,6 +10,7 @@ import "./app.css";
 
 const dataBase = {
     id: 0,
+    counter: 0,
 
     monday: [
 
@@ -57,6 +58,7 @@ class App extends Component {
                     copyDataBase[e.target.dataset.weekday].splice(copyDataBase[e.target.dataset.weekday].indexOf(item), 1);
                 }
             });
+            copyDataBase.counter = copyDataBase.counter - 1;
             localStorage.setItem("dataBase", JSON.stringify(copyDataBase));
 
             this.setState({
@@ -66,7 +68,7 @@ class App extends Component {
         }
     }
     //check a time on day (free or busy already) for createItem
-    checkTimeOnDay = (array, time, day) => {
+    checkTimeOnDay = (array, time, day,) => {
         let flag = false;
         array.forEach(item => {
             if (item[1] === time) {
@@ -79,46 +81,57 @@ class App extends Component {
 
     createItem = (name, time, day, notice = false) => {
         const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
-        const item = [name, time, copyDataBase.id++, notice]
-
-        switch (day) {
+        
+        if (!name || !time) {
+            alert("Вы ввели не все данные!")
+        } else {
+            const item = [name, time, copyDataBase.id++, notice]
+            switch (day) {
             case "Понедельник":
                 if (!this.checkTimeOnDay(copyDataBase.monday, time, day)) {
                     copyDataBase.monday.push(item);
+                    copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Вторник":
                 if (!this.checkTimeOnDay(copyDataBase.tuesday, time, day)) {
                     copyDataBase.tuesday.push(item);
+                    copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Среда":
                 if (!this.checkTimeOnDay(copyDataBase.wednesday, time, day)) {
                     copyDataBase.wednesday.push(item);
+                    copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Четверг":
                 if (!this.checkTimeOnDay(copyDataBase.thursday, time, day)) {
                     copyDataBase.thursday.push(item);
+                    copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Пятница":
                 if (!this.checkTimeOnDay(copyDataBase.friday, time, day)) {
                     copyDataBase.friday.push(item);
+                    copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Суббота":
                 if (!this.checkTimeOnDay(copyDataBase.saturday, time, day)) {
                     copyDataBase.saturday.push(item);
+                    copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Воскресенье":
                 if (!this.checkTimeOnDay(copyDataBase.sunday, time, day)) {
                     copyDataBase.sunday.push(item);
+                    copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             default:
                 break;
+            }
         }
 
         localStorage.setItem("dataBase", JSON.stringify(copyDataBase));
@@ -146,13 +159,30 @@ class App extends Component {
             }
     }
 
+    findItem = (name) => {
+        const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
+        const searchingDataBase = JSON.parse(JSON.stringify(copyDataBase));
+        const array = [];
+        for (let week in searchingDataBase) {
+            if (typeof (searchingDataBase[week]) === "object") {
+                searchingDataBase[week].forEach(item => {
+                    if (item[0].match(name)) {
+                        array.push(item)
+                        console.log(array);
+                    }
+                })
+            }
+        }
+
+    }
+
     render() {
         return (
             <div className="app">
-                <AppInfo></AppInfo>
+                <AppInfo counter={this.state.dataBase.counter}></AppInfo>
 
                 <div className="search-panel">
-                    <SearchPanel />
+                    <SearchPanel findItem={this.findItem}/>
                     <Filter />
                 </div>
 
