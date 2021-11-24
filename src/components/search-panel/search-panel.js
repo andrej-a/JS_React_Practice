@@ -10,13 +10,13 @@ class SearchPanel extends Component {
     }
 
     onSetDates = (e) => {
-        e.preventDefault()
         
         this.setState({
             name: e.target.value
         });
 
-        this.props.findItem(this.state.name)
+        this.props.findItem(e.target.value)
+        
     }
 
 
@@ -24,8 +24,8 @@ class SearchPanel extends Component {
         return(
             <input 
             onChange={this.onSetDates}
+            value={this.state.name}
             type="text"
-            name="name"
             className="form-control search-input"
             placeholder="Найти ученика..." 
             />

@@ -30,6 +30,7 @@ const Days = ({dataBase, deleteItem, toggleNotice}) => {
                 index={item[2]} //for onDelete
                 weekDay={weekDay} //for onDelete
                 notice={item[3]} //for toggleNotice
+                repeat={item[4]} //for filter
                 deleteItem={deleteItem}
                 toggleNotice={toggleNotice}
                 />);

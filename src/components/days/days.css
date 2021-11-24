@@ -13,6 +13,7 @@
     display: block;
 }
 .day-heading>h2{
+    margin-top: 20px;
     padding: 10px;
 }
 

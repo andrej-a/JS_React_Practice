@@ -1,14 +1,22 @@
 import "./app-filter.css";
 
-const Filter = () => {
+const Filter = (props) => {
     return(
         <div className="btn-group">
-            <button type="button" className="btn btn-light">
+            <button
+            onClick={props.filterAllItems} 
+            type="button" 
+            className="btn btn-light">
                     Все ученики
             </button>
-            <button type="button" className="btn btn-outline-light">
+            
+            <button
+            onClick={props.filterItemOnceAtWeek} 
+            type="button" 
+            className="btn btn-outline-light">
                     Больше одного занятия в неделю
             </button>
+            
             <button type="button" className="btn btn-outline-light">
                     Больше трёх занятий в неделю
             </button>
