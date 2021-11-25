@@ -17,9 +17,6 @@ const Filter = (props) => {
                     Больше одного занятия в неделю
             </button>
             
-            <button type="button" className="btn btn-outline-light">
-                    Больше трёх занятий в неделю
-            </button>
         </div>
     )
 }

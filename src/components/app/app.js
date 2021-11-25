@@ -41,10 +41,12 @@ class App extends Component {
         if (!localStorage.getItem("dataBase")) {
             this.state = {
                 dataBase: dataBase,
+                daysArray: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
             };
         } else {
             this.state = {
                 dataBase: JSON.parse(localStorage.getItem("dataBase")),
+                daysArray: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
             };
         }
     }
@@ -53,16 +55,25 @@ class App extends Component {
         if (e.target.classList.contains("fa-trash")) {
             const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase)); //deep copy
             let deletingValue = null;
+            let counter = 0;
+
             //copyDataBase["monday"] etc.
-            copyDataBase[e.target.dataset.weekday].forEach(item => {
-                if (item[2] === +e.target.id) {
+            copyDataBase[e.target.dataset.weekday].forEach(deletingItem => {
+                if (deletingItem[2] === +e.target.id) {
+                    deletingValue = deletingItem;
+                    copyDataBase[e.target.dataset.weekday].splice(copyDataBase[e.target.dataset.weekday].indexOf(deletingItem), 1);
 
-                    this.checkRepeat(copyDataBase, item, false);
-                    deletingValue = item;
-                    copyDataBase[e.target.dataset.weekday].splice(copyDataBase[e.target.dataset.weekday].indexOf(item), 1);
+                    this.state.daysArray.forEach(day => {
+                        copyDataBase[day].forEach(item => {
+                            if (deletingValue[0] === item[0]) {//check all DB looking for same values for
+                                counter++               //deletingItem and if true counter++
+                            }   
+                        });
+                    })
 
-                }
-            });
+                }//if
+            });//forEach
+
             copyDataBase.counter = copyDataBase.counter - 1;
             localStorage.setItem("dataBase", JSON.stringify(copyDataBase));
 
@@ -70,23 +81,18 @@ class App extends Component {
                 dataBase: copyDataBase
             })
 
-
-            let daysArray = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];   
-            const checkingDataBase = JSON.parse(localStorage.getItem("dataBase"));
-            let counter = 0;
-            daysArray.forEach(day => {
-                checkingDataBase[day].forEach(item => {
-                    if (deletingValue[0] === item[0]) {
-                        counter++
-                        counter === 1 ? item[4] = false : item[4] = true 
+            this.state.daysArray.forEach(day => {
+                copyDataBase[day].forEach(item => {
+                    if (deletingValue[0] === item[0]) { //if same values with deletingItem more then 1 so
+                        counter === 1 ? item[4] = false : item[4] = true //other items[4] = true
                     }   
                 });
             })
 
-            localStorage.setItem("dataBase", JSON.stringify(checkingDataBase));
+            localStorage.setItem("dataBase", JSON.stringify(copyDataBase));
 
             this.setState({
-                dataBase: checkingDataBase
+                dataBase: copyDataBase
             })
         }
     }
@@ -103,74 +109,71 @@ class App extends Component {
     }
 
     checkRepeat = (data, array, value) => {
-        let daysArray = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];   
         
-        daysArray.forEach(day => {
+        this.state.daysArray.forEach(day => {
             data[day].forEach(item => {
                 if (array[0] === item[0]) {
-                    item[4] = value;
-                    array[4] = value;
+                    item[4] = value;//if the names of the cards creating before same with new card
+                    array[4] = value;//so repeat = true for byOnceWeekFilters
                 }   
             });
         })
         localStorage.setItem("dataBase", JSON.stringify(data));
 
-
         this.setState({
             dataBase: data
         })
-
         return array
-
     }
 
     createItem = (name, time, day, notice = false, repeat = false) => {
         const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
         
         if (!name || !time) {
+            //just alert now
             alert("Вы ввели не все данные!")
         } else {
-            const item = [name, time, copyDataBase.id++, notice, repeat]
+            const newCard = [name, time, copyDataBase.id++, notice, repeat]//create card
             switch (day) {
             case "Понедельник":
                 if (!this.checkTimeOnDay(copyDataBase.monday, time, day)) {
-                    copyDataBase.monday.push(this.checkRepeat(copyDataBase, item, true));
+                    copyDataBase.monday.push(this.checkRepeat(copyDataBase, newCard, true));
                     copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Вторник":
                 if (!this.checkTimeOnDay(copyDataBase.tuesday, time, day)) {
-                    copyDataBase.tuesday.push(this.checkRepeat(copyDataBase, item, true));
+                    copyDataBase.tuesday.push(this.checkRepeat(copyDataBase, newCard, true));
                     copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Среда":
                 if (!this.checkTimeOnDay(copyDataBase.wednesday, time, day)) {
-                    copyDataBase.wednesday.push(this.checkRepeat(copyDataBase, item, true), true);
+                    copyDataBase.wednesday.push(this.checkRepeat(copyDataBase, newCard, true), true);
                     copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Четверг":
                 if (!this.checkTimeOnDay(copyDataBase.thursday, time, day)) {
-                    copyDataBase.thursday.push(this.checkRepeat(copyDataBase, item, true));
+                    copyDataBase.thursday.push(this.checkRepeat(copyDataBase, newCard, true));
                     copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Пятница":
                 if (!this.checkTimeOnDay(copyDataBase.friday, time, day)) {
-                    copyDataBase.friday.push(this.checkRepeat(copyDataBase, item, true));
+                    copyDataBase.friday.push(this.checkRepeat(copyDataBase, newCard, true));
                     copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Суббота":
                 if (!this.checkTimeOnDay(copyDataBase.saturday, time, day)) {
-                    copyDataBase.saturday.push(this.checkRepeat(copyDataBase, item, true));
+                    copyDataBase.saturday.push(this.checkRepeat(copyDataBase, newCard, true));
                     copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
             case "Воскресенье":
                 if (!this.checkTimeOnDay(copyDataBase.sunday, time, day)) {
-                    copyDataBase.sunday.push(this.checkRepeat(copyDataBase, item, true));
+                    copyDataBase.sunday.push(this.checkRepeat(copyDataBase, newCard, true));
                     copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
@@ -205,15 +208,13 @@ class App extends Component {
     }
 
     findItem = (name) => {
-        const searchingDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
-        let daysArray = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-        console.log(name);
+        const searchingDataBase = JSON.parse(JSON.stringify(this.state.dataBase));//deep copy
         if (name.length === 0) {
             return this.setState({
                 dataBase: JSON.parse(localStorage.getItem("dataBase"))
             })
         } else {
-            daysArray.forEach(day => {
+            this.state.daysArray.forEach(day => {
                 searchingDataBase[day].forEach(item => {
                     if (!item[0].match(name)) {
                         searchingDataBase[day].splice(searchingDataBase[day].indexOf(item), 1);
@@ -229,9 +230,8 @@ class App extends Component {
 
     filterItemOnceAtWeek = () => {
         const filterDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
-        let daysArray = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
-        daysArray.forEach(day => {
+        this.state.daysArray.forEach(day => {
             filterDataBase[day].forEach(item => {
                 if (!item[4]) {
                     filterDataBase[day].splice(filterDataBase[day].indexOf(item), 1);
@@ -245,6 +245,7 @@ class App extends Component {
     }
 
     filterAllItems = () => {
+        console.log(JSON.parse(localStorage.getItem("dataBase")));
         this.setState({
             dataBase: JSON.parse(localStorage.getItem("dataBase"))
         })
