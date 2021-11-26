@@ -75,11 +75,6 @@ class App extends Component {
             });//forEach
 
             copyDataBase.counter = copyDataBase.counter - 1;
-            localStorage.setItem("dataBase", JSON.stringify(copyDataBase));
-
-            this.setState({
-                dataBase: copyDataBase
-            })
 
             this.state.daysArray.forEach(day => {
                 copyDataBase[day].forEach(item => {
@@ -142,14 +137,14 @@ class App extends Component {
                 }
                 break;
             case "Вторник":
-                if (!this.checkTimeOnDay(copyDataBase.tuesday, time, day)) {
-                    copyDataBase.tuesday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
+                    if (!this.checkTimeOnDay(copyDataBase.tuesday, time, day)) {
+                        copyDataBase.tuesday.push(this.checkRepeat(copyDataBase, newCard, true));
+                        copyDataBase.counter = copyDataBase.counter + 1;
+                    }
                 break;
             case "Среда":
                 if (!this.checkTimeOnDay(copyDataBase.wednesday, time, day)) {
-                    copyDataBase.wednesday.push(this.checkRepeat(copyDataBase, newCard, true), true);
+                    copyDataBase.wednesday.push(this.checkRepeat(copyDataBase, newCard, true));
                     copyDataBase.counter = copyDataBase.counter + 1;
                 }
                 break;
@@ -190,62 +185,65 @@ class App extends Component {
     }
 
     toggleNotice = (e) => {
-            if (!e.target.classList.contains("fa-trash")) {
-                const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
-                
-                copyDataBase[e.currentTarget.dataset.weekday].forEach(item => {
-                    if (item[2] === +e.currentTarget.dataset.index) {
-                        item[3] = !item[3]
+        if (!e.target.classList.contains("fa-trash")) {
+            const {dataBase} = this.state;
+            
+            dataBase[e.currentTarget.dataset.weekday].map(item => {
+                if (item[2] === +e.currentTarget.dataset.index) {
+                    return [...item, item[3] = !item[3]]
+                }
+                    return item
+            })
+
+                this.setState(() => {
+                    return {
+                        dataBase: dataBase
                     }
                 })
 
-                this.setState(({dataBase}) => ({
-                    dataBase: copyDataBase
-                }))
-
-                localStorage.setItem("dataBase", JSON.stringify(copyDataBase));
-            }
+            localStorage.setItem("dataBase", JSON.stringify(dataBase));
+        }
     }
 
     findItem = (name) => {
-        const searchingDataBase = JSON.parse(JSON.stringify(this.state.dataBase));//deep copy
         if (name.length === 0) {
             return this.setState({
                 dataBase: JSON.parse(localStorage.getItem("dataBase"))
             })
         } else {
-            this.state.daysArray.forEach(day => {
-                searchingDataBase[day].forEach(item => {
-                    if (!item[0].match(name)) {
-                        searchingDataBase[day].splice(searchingDataBase[day].indexOf(item), 1);
-                    }
-                })
-            })
-    
-            return this.setState({
-                dataBase: searchingDataBase
-            })
+            const {dataBase} = this.state;
+
+            for (let day in dataBase) {
+                if (typeof dataBase[day] === "object") {
+                    dataBase[day] = dataBase[day].filter(item => item[0].toLowerCase().match(name.toLowerCase()))
+                    this.setState(() => {
+                        return {
+                            dataBase: dataBase
+                        }
+                    })
+                }
+            }
+            
         }
     }
 
     filterItemOnceAtWeek = () => {
-        const filterDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
+        const {dataBase} = this.state;
 
-        this.state.daysArray.forEach(day => {
-            filterDataBase[day].forEach(item => {
-                if (!item[4]) {
-                    filterDataBase[day].splice(filterDataBase[day].indexOf(item), 1);
-                }
-            })
-        })
-
-        this.setState({
-            dataBase: filterDataBase
-        })
+        for (let day in dataBase) {
+            if (typeof dataBase[day] === "object") {
+                dataBase[day] = dataBase[day].filter(item => item[4])
+                this.setState(() => {
+                   return {
+                       dataBase: dataBase
+                   }
+                })
+            }
+        }
     }
 
+
     filterAllItems = () => {
-        console.log(JSON.parse(localStorage.getItem("dataBase")));
         this.setState({
             dataBase: JSON.parse(localStorage.getItem("dataBase"))
         })
