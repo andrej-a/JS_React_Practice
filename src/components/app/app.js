@@ -216,13 +216,14 @@ class App extends Component {
             for (let day in dataBase) {
                 if (typeof dataBase[day] === "object") {
                     dataBase[day] = dataBase[day].filter(item => item[0].toLowerCase().match(name.toLowerCase()))
-                    this.setState(() => {
-                        return {
-                            dataBase: dataBase
-                        }
-                    })
                 }
             }
+
+            this.setState(() => {
+                return {
+                    dataBase: dataBase
+                }
+            })
             
         }
     }
@@ -233,13 +234,14 @@ class App extends Component {
         for (let day in dataBase) {
             if (typeof dataBase[day] === "object") {
                 dataBase[day] = dataBase[day].filter(item => item[4])
-                this.setState(() => {
-                   return {
-                       dataBase: dataBase
-                   }
-                })
             }
         }
+
+        this.setState(() => {
+            return {
+                dataBase: dataBase
+            }
+         })
     }
 
 
