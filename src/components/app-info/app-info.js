@@ -1,5 +1,5 @@
 
-import "./app-info.css";
+import "./app-info.scss";
 
 const AppInfo = ({counter}) => {
     return(

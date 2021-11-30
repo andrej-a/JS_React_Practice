@@ -1,0 +1,17 @@
+@import "../../varyable.scss";
+.app-info {
+    padding: 25px;
+    margin-top: 25px;
+    background-color: $main-color;
+    border-radius: 4px;
+    box-shadow: 5px 5px 15px rgba(0,0,0, .15);
+    color: #fff;
+
+    h1 {
+        text-align: center;
+    }
+
+    h2 {
+        font-weight: 200;
+    }
+}

@@ -6,10 +6,9 @@ import Filter from "../app-filter/app-filter";
 import Days from "../days/days";
 import StudentAddForm from "../student-add-form/student-add-form";
 
-import "./app.css";
+import "./app.scss";
 
 const dataBase = {
-    id: 0,
     counter: 0,
 
     monday: [
@@ -41,24 +40,27 @@ class App extends Component {
         if (!localStorage.getItem("dataBase")) {
             this.state = {
                 dataBase: dataBase,
-                daysArray: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+                daysArray: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+
             };
         } else {
             this.state = {
                 dataBase: JSON.parse(localStorage.getItem("dataBase")),
-                daysArray: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+                daysArray: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
             };
         }
+
+        this.id = 0;
     }
 
     deleteItem = (e) => {
-        if (e.target.classList.contains("fa-trash")) {
+        if (e.currentTarget.classList.contains("btn-trash") || e.target.classList.contains("fa-trash")) {
             const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase)); //deep copy
             let deletingValue = null;
             let counter = 0;
 
             //copyDataBase["monday"] etc.
-            copyDataBase[e.target.dataset.weekday].forEach(deletingItem => {
+            copyDataBase[e.currentTarget.dataset.weekday].forEach(deletingItem => {
                 if (deletingItem[2] === +e.target.id) {
                     deletingValue = deletingItem;
                     copyDataBase[e.target.dataset.weekday].splice(copyDataBase[e.target.dataset.weekday].indexOf(deletingItem), 1);
@@ -128,7 +130,7 @@ class App extends Component {
             //just alert now
             alert("Вы ввели не все данные!")
         } else {
-            const newCard = [name, time, copyDataBase.id++, notice, repeat]//create card
+            const newCard = [name, time, this.id++, notice, repeat]//create card
             switch (day) {
             case "Понедельник":
                 if (!this.checkTimeOnDay(copyDataBase.monday, time, day)) {
@@ -185,7 +187,7 @@ class App extends Component {
     }
 
     toggleNotice = (e) => {
-        if (!e.target.classList.contains("fa-trash")) {
+        if (!e.target.classList.contains("btn-trash") && !e.target.classList.contains("fa-trash")) {
             const {dataBase} = this.state;
             
             dataBase[e.currentTarget.dataset.weekday].map(item => {
@@ -244,7 +246,6 @@ class App extends Component {
          })
     }
 
-
     filterAllItems = () => {
         this.setState({
             dataBase: JSON.parse(localStorage.getItem("dataBase"))
@@ -261,7 +262,8 @@ class App extends Component {
                     <SearchPanel findItem={this.findItem}/>
                     <Filter
                     filterAllItems={this.filterAllItems} 
-                    filterItemOnceAtWeek={this.filterItemOnceAtWeek}/>
+                    filterItemOnceAtWeek={this.filterItemOnceAtWeek}
+                    />
                 </div>
 
                 <div className="day-items">

@@ -1,6 +1,6 @@
 import { Component } from "react";
 
-import "./student-add-form.css";
+import "./student-add-form.scss";
 
 
 class StudentAddForm extends Component{

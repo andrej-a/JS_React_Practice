@@ -1,5 +1,5 @@
 import { Component } from "react";
-import "./search-panel.css"
+import "./search-panel.scss"
 
 class SearchPanel extends Component {
     constructor(props) {
@@ -10,20 +10,18 @@ class SearchPanel extends Component {
     }
 
     onSetDates = (e) => {
-        
         this.setState({
             name: e.target.value
         });
-
-        this.props.findItem(e.target.value)
-        
     }
-
 
     render() {
         return(
             <input 
-            onChange={this.onSetDates}
+            onChange={(e) => {
+                this.onSetDates(e)
+                this.props.findItem(e.target.value)
+            }}
             value={this.state.name}
             type="text"
             className="form-control search-input"

@@ -1,5 +1,5 @@
 
-import "./student-list-item.css";
+import "./student-list-item.scss";
 
 const StudentItem = (props) => {
     
@@ -26,6 +26,8 @@ const StudentItem = (props) => {
                 
                 <button 
                 onClick={deleteItem} 
+                id={index}
+                data-weekday={weekDay}
                 type="button"
                 className="btn-trash btn-sm ">
                     

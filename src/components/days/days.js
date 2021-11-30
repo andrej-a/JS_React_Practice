@@ -1,5 +1,5 @@
 import StudentItem from "../student-list-item/student-list-item";
-import "./days.css";
+import "./days.scss";
 
 
 const Days = ({dataBase, deleteItem, toggleNotice}) => {
