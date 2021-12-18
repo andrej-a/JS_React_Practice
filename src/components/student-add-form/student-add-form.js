@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 
 import "./student-add-form.scss";
 
@@ -11,6 +11,7 @@ class StudentAddForm extends Component{
             time: "",
             day: "Понедельник",
         };
+        this.myRef = React.createRef();
     }
     //установить данные
     onSetDates = (e) => {
@@ -31,6 +32,14 @@ class StudentAddForm extends Component{
         })
     }
 
+    onFocus = () => {
+        this.myRef.current.focus();
+    }
+
+    componentDidMount() {
+        this.onFocus();
+    }
+
     render() {           
         const {name, time, day} = this.state;
         return (
@@ -39,7 +48,8 @@ class StudentAddForm extends Component{
                 <form
                     onSubmit={(e) => {this.createItem(e)}}
                     className="add-form d-flex">
-                    <input 
+                    <input
+                        ref={this.myRef} 
                         onChange={this.onSetDates} 
                         type="text"
                         className="form-control new-post-label"
