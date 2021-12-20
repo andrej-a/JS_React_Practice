@@ -1,6 +1,6 @@
 # Training React-project of timetable of classes "StudyBox"
 
-Watch it on [Hiroku StudyBox](https://study-box-react-project.herokuapp.com/).
+Watch it on [Heroku StudyBox](https://study-box-react-project.herokuapp.com/).
 
 ## Main feature
 
