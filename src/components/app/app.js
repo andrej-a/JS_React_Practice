@@ -137,62 +137,19 @@ class App extends Component {
         })
         return array
     }
-
-    createItem = (name, time, day, notice = false, repeat = false) => {
+    
+    //1.person`s name  2.time of studying 3.day of studying 4.data for adding persons into DB
+    createItem = (name, time, day, objDay, notice = false, repeat = false) => {
         const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
         
         if (!name || !time) {
             this.onSetWarning();
         } else {
             const newCard = [name, time, copyDataBase["id"]++, notice, repeat]//create card
-            switch (day) {
-            case "Понедельник":
-                if (!this.checkTimeOnDay(copyDataBase.monday, time, day)) {
-                        //it isn`t workinh. why?
-                    //this.onUpdateDataBase(this.checkRepeat(copyDataBase, newCard, true))
-
-                    copyDataBase.monday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Вторник":
-                    if (!this.checkTimeOnDay(copyDataBase.tuesday, time, day)) {
-                        copyDataBase.tuesday.push(this.checkRepeat(copyDataBase, newCard, true));
-                        copyDataBase.counter = copyDataBase.counter + 1;
-                    }
-                break;
-            case "Среда":
-                if (!this.checkTimeOnDay(copyDataBase.wednesday, time, day)) {
-                    copyDataBase.wednesday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Четверг":
-                if (!this.checkTimeOnDay(copyDataBase.thursday, time, day)) {
-                    copyDataBase.thursday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Пятница":
-                if (!this.checkTimeOnDay(copyDataBase.friday, time, day)) {
-                    copyDataBase.friday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Суббота":
-                if (!this.checkTimeOnDay(copyDataBase.saturday, time, day)) {
-                    copyDataBase.saturday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Воскресенье":
-                if (!this.checkTimeOnDay(copyDataBase.sunday, time, day)) {
-                    copyDataBase.sunday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            default:
-                break;
+                //if time is not repeat so ...
+            if (!this.checkTimeOnDay(copyDataBase[objDay], time, day)) {
+                copyDataBase[objDay].push(this.checkRepeat(copyDataBase, newCard, true));
+                copyDataBase.counter = copyDataBase.counter + 1;
             }
         }
 
@@ -201,12 +158,6 @@ class App extends Component {
         this.setState({
             dataBase: copyDataBase
         })
-    }
-
-    onUpdateDataBase = (newItem) => {
-        this.setState(({dataBase}) => ({
-            dataBase: [...dataBase, ...newItem]
-        }))
     }
 
     toggleNotice = (e) => {
@@ -301,6 +252,7 @@ class App extends Component {
 
                     <StudentAddForm
                         createItem={this.createItem}
+                        createItemMin={this.createItemMin}
                     />
 
                 </div>
