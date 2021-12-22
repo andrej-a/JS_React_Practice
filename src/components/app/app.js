@@ -1,15 +1,17 @@
-import { Component } from "react";
+import React, { Component } from "react";
 
 import AppInfo from "../app-info/app-info";
 import SearchPanel from "../search-panel/search-panel";
 import Filter from "../app-filter/app-filter";
 import Days from "../days/days";
 import StudentAddForm from "../student-add-form/student-add-form";
+import ModalWindow from "../modal-window/modalWindow";
 
 import "./app.scss";
 
 const dataBase = {
     counter: 0,
+    id: 0,
 
     monday: [
 
@@ -41,16 +43,16 @@ class App extends Component {
             this.state = {
                 dataBase: dataBase,
                 daysArray: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+                warning: false,
 
             };
         } else {
             this.state = {
                 dataBase: JSON.parse(localStorage.getItem("dataBase")),
                 daysArray: ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"],
+                warning: false,
             };
         }
-
-        this.id = 0;
     }
 
     deleteItem = (e) => {
@@ -98,11 +100,24 @@ class App extends Component {
         let flag = false;
         array.forEach(item => {
             if (item[1] === time) {
-                alert(`Это время ${time} в этот день ${day} уже занято!`)
+                this.onSetWarning();
+                this.title = `Это время ${time} в этот день ${day.toLowerCase()} уже занято!`
                 flag = true;
             }
         })
         return flag;
+    }
+
+    onSetWarning = () => {
+        this.setState({
+            warning: true
+        })
+    }
+
+    offSetWarning = () => {
+        this.setState({
+            warning: false
+        })
     }
 
     checkRepeat = (data, array, value) => {
@@ -122,68 +137,27 @@ class App extends Component {
         })
         return array
     }
-
-    createItem = (name, time, day, notice = false, repeat = false) => {
+    
+    //1.person`s name  2.time of studying 3.day of studying 4.data for adding persons into DB
+    createItem = (name, time, day, objDay, notice = false, repeat = false) => {
         const copyDataBase = JSON.parse(JSON.stringify(this.state.dataBase));
         
         if (!name || !time) {
-            //just alert now
-            alert("Вы ввели не все данные!")
+            this.onSetWarning();
         } else {
-            const newCard = [name, time, this.id++, notice, repeat]//create card
-            switch (day) {
-            case "Понедельник":
-                if (!this.checkTimeOnDay(copyDataBase.monday, time, day)) {
-                    copyDataBase.monday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Вторник":
-                    if (!this.checkTimeOnDay(copyDataBase.tuesday, time, day)) {
-                        copyDataBase.tuesday.push(this.checkRepeat(copyDataBase, newCard, true));
-                        copyDataBase.counter = copyDataBase.counter + 1;
-                    }
-                break;
-            case "Среда":
-                if (!this.checkTimeOnDay(copyDataBase.wednesday, time, day)) {
-                    copyDataBase.wednesday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Четверг":
-                if (!this.checkTimeOnDay(copyDataBase.thursday, time, day)) {
-                    copyDataBase.thursday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Пятница":
-                if (!this.checkTimeOnDay(copyDataBase.friday, time, day)) {
-                    copyDataBase.friday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Суббота":
-                if (!this.checkTimeOnDay(copyDataBase.saturday, time, day)) {
-                    copyDataBase.saturday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            case "Воскресенье":
-                if (!this.checkTimeOnDay(copyDataBase.sunday, time, day)) {
-                    copyDataBase.sunday.push(this.checkRepeat(copyDataBase, newCard, true));
-                    copyDataBase.counter = copyDataBase.counter + 1;
-                }
-                break;
-            default:
-                break;
+            const newCard = [name, time, copyDataBase["id"]++, notice, repeat]//create card
+                //if time is not repeat so ...
+            if (!this.checkTimeOnDay(copyDataBase[objDay], time, day)) {
+                copyDataBase[objDay].push(this.checkRepeat(copyDataBase, newCard, true));
+                copyDataBase.counter = copyDataBase.counter + 1;
             }
         }
 
         localStorage.setItem("dataBase", JSON.stringify(copyDataBase));
 
-        this.setState(({ state }) => ({
+        this.setState({
             dataBase: copyDataBase
-        }))
+        })
     }
 
     toggleNotice = (e) => {
@@ -253,32 +227,36 @@ class App extends Component {
     }
 
     render() {
-        
+        const {warning} = this.state;
+        const warningWindow = warning ? <ModalWindow title={this.title} offWarning={this.offSetWarning}></ModalWindow> : null;
         return (
-            <div className="app">
-                <AppInfo counter={this.state.dataBase.counter}></AppInfo>
+            <React.StrictMode>
+                <div className="app">
+                    {warningWindow}
+                    <AppInfo counter={this.state.dataBase.counter}></AppInfo>
+                    <div className="search-panel">
+                        <SearchPanel findItem={this.findItem}/>
+                        <Filter
+                        filterAllItems={this.filterAllItems} 
+                        filterItemOnceAtWeek={this.filterItemOnceAtWeek}
+                        />
+                    </div>
 
-                <div className="search-panel">
-                    <SearchPanel findItem={this.findItem}/>
-                    <Filter
-                    filterAllItems={this.filterAllItems} 
-                    filterItemOnceAtWeek={this.filterItemOnceAtWeek}
+                    <div className="day-items">
+                        <Days
+                            dataBase={this.state.dataBase}
+                            deleteItem={(e) => { this.deleteItem(e) }}
+                            toggleNotice={(e) => { this.toggleNotice(e) }}
+                        />
+                    </div>
+
+                    <StudentAddForm
+                        createItem={this.createItem}
+                        createItemMin={this.createItemMin}
                     />
+
                 </div>
-
-                <div className="day-items">
-                    <Days
-                        dataBase={this.state.dataBase}
-                        deleteItem={(e) => { this.deleteItem(e) }}
-                        toggleNotice={(e) => { this.toggleNotice(e) }}
-                    />
-                </div>
-
-                <StudentAddForm
-                    createItem={this.createItem}
-                />
-
-            </div>//app
+            </React.StrictMode>
         )
     }
 }
