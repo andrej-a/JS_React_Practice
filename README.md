@@ -4,7 +4,7 @@ Watch it on [Heroku StudyBox](https://study-box-react-project.herokuapp.com/).
 
 ## Main feature
 
-:heavy_check_mark:  the ability to add an item to the list
+:heavy_check_mark: the ability to add an item to the list
 
 :heavy_check_mark: the ability to delete an item from the list
 
@@ -22,10 +22,10 @@ Watch it on [Heroku StudyBox](https://study-box-react-project.herokuapp.com/).
 
 :heavy_check_mark: automatic safe your data to localstorage and getting them from there
 
+:heavy_check_mark: a modal window for warning the repeating time or incorrect data
+
 
 ## Future scopes
-
-:heavy_multiplication_x: to create a modal window for warning the repeating time
 
 :heavy_multiplication_x: improve the deleting an item
 
