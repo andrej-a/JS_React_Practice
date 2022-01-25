@@ -144,6 +144,7 @@ class App extends Component {
         
         if (!name || !time) {
             this.onSetWarning();
+            this.title = 'Вы ввели не все данные!';
         } else {
             const newCard = [name, time, copyDataBase["id"]++, notice, repeat]//create card
                 //if time is not repeat so ...
@@ -228,11 +229,14 @@ class App extends Component {
 
     render() {
         const {warning} = this.state;
-        const warningWindow = warning ? <ModalWindow title={this.title} offWarning={this.offSetWarning}></ModalWindow> : null;
         return (
             <React.StrictMode>
                 <div className="app">
-                    {warningWindow}
+                <ModalWindow 
+                show={warning} 
+                title={this.title} 
+                offWarning={this.offSetWarning}
+                ></ModalWindow>
                     <AppInfo counter={this.state.dataBase.counter}></AppInfo>
                     <div className="search-panel">
                         <SearchPanel findItem={this.findItem}/>

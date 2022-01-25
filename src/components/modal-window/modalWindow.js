@@ -1,11 +1,21 @@
 import "./modalWindow.scss";
 import PropTypes from 'prop-types';
-
+import { CSSTransition } from 'react-transition-group';
 
 const ModalWindow = (props) => {
+    const timeout= 300;
+
     return (
-        <div className="modal">
-            <div onClick={props.offWarning} className="modal-wrapper">
+        <CSSTransition
+        timeout={timeout}
+        unmountOnExit
+        classNames="alert"
+        in={props.show}
+        >
+            <div className="modal alert">
+            <div onClick={() => {
+                props.offWarning()
+            }} className="modal-wrapper">
                 <div className="modal-window">
                     <div className="modal-title">
                         <p>{props.title}</p>
@@ -13,6 +23,7 @@ const ModalWindow = (props) => {
                 </div>
             </div>
         </div>
+        </CSSTransition>
     )
 }
 

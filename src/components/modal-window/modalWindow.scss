@@ -1,6 +1,9 @@
 @import "../../varyable.scss";
 
 .modal {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     display: block;
     width: 100%;
     height: 100%;
@@ -39,3 +42,40 @@
         }
     }
 }
+
+.alert{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    visibility: hidden;
+    opacity: 0;
+    transition: all .3s ease-in-out;
+}
+.alert-enter {
+    opacity: 0;
+    visibility: hidden;
+}
+.alert-enter-active {
+    opacity: 1;
+    visibility: visible;
+    transition: all .3s ease-in-out;
+}
+.alert-enter-done {
+    left: 0;
+    opacity: 1;
+    visibility: visible;
+}
+.alert-exit {
+    opacity: 1;
+    visibility: visible;
+}
+.alert-exit-active {
+    opacity: 0;
+    visibility: hidden;
+}
+.alert-exit-done{
+    opacity: 0;
+    visibility: hidden;
+    transition: all .3s ease-in-out;
+}
+
